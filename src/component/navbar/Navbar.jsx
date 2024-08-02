@@ -1,10 +1,15 @@
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-
 export default function Navbar() {
   const [sticky, setSticky] = useState(false);
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") ? localStorage.getItem("theme") : "light"
   );
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    navigate("/login");
+  };
   const element = document.documentElement;
   useEffect(() => {
     if (theme === "dark") {
@@ -138,7 +143,9 @@ export default function Navbar() {
                 </svg>
               </label>
             </div>
-            <button className="btn btn-primary">Login</button>
+            <button className="btn btn-primary" onClick={handleLogin}>
+              Login
+            </button>
           </div>
         </div>
       </div>
