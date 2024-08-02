@@ -8,8 +8,9 @@ export default function FreeBook() {
     return item.category === "free";
   });
   var settings = {
-    dots: true,
+    dots: false,
     infinite: false,
+    arrows: false,
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 3,
@@ -43,7 +44,7 @@ export default function FreeBook() {
   };
 
   return (
-    <div className="max-w-screen-xl container mx-auto md:mx-20 px-4 py-24 overflow-hidden">
+    <div className=" md:mx-20 px-4 py-24 overflow-hidden">
       <div>
         <h1 className="font-semibold text-xl pb-2">Free Offered Courses</h1>
         <p>
