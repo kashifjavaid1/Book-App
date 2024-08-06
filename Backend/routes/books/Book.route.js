@@ -1,4 +1,6 @@
-import mongoose from "mongoose";
-import { getBooks, createBooks } from "../../models/conntroller/book.controler";
+import express from "express";
+import { getBooks, createBooks } from "../../conntroller/book.controler.js";
 const router = express.Router();
-router.get("/");
+router.get("/", getBooks);
+router.post("/", createBooks);
+export default router;

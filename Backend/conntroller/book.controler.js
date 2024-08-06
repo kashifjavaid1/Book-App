@@ -1,7 +1,17 @@
-import bookModel from "../books/book.model";
+import bookModel from "../models/books/book.model.js";
 
 const createBooks = async (req, res) => {
-  const book = new bookModel(req.body);
+  const { title, price, name, category, image } = await req.body;
+  console.log("Request Body:", req.body);
+
+  const book = new bookModel({
+    title,
+    price,
+    name,
+    category,
+    image,
+  });
+
   try {
     const newBook = await book.save();
     res.status(201).json(newBook);
