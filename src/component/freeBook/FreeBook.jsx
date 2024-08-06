@@ -1,12 +1,28 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import list from "../../../public/list.json";
 import Card from "../card/Card";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import API_ROUTE from "../../../config";
+
 export default function FreeBook() {
-  const filterData = list?.filter((item) => {
-    return item.category === "free";
-  });
+  const [books, setBooks] = useState([]);
+  const [error, setError] = useState(null);
+
+  const filterData = async () => {
+    try {
+      const response = await axios.get(`${API_ROUTE}/book`);
+      setBooks(response.data);
+    } catch (error) {
+      console.error("Error fetching books:", error);
+      setError(error.message);
+    }
+  };
+  useEffect(() => {
+    filterData();
+  }, []);
+
   var settings = {
     dots: false,
     infinite: false,
@@ -44,7 +60,7 @@ export default function FreeBook() {
   };
 
   return (
-    <div className=" md:mx-20 px-4 py-24 overflow-hidden">
+    <div className="md:mx-20 px-4 py-24 overflow-hidden">
       <div>
         <h1 className="font-semibold text-xl pb-2">Free Offered Courses</h1>
         <p>
@@ -53,13 +69,17 @@ export default function FreeBook() {
           non suscipit, iure neque earum?
         </p>
       </div>
-      <div>
-        <Slider {...settings}>
-          {filterData?.map((item) => (
-            <Card items={item} key={item.id} />
-          ))}
-        </Slider>
-      </div>
+      {error ? (
+        <div className="text-red-500">Error: {error}</div>
+      ) : (
+        <div>
+          <Slider {...settings}>
+            {books?.map((book) => (
+              <Card key={book._id} items={book} />
+            ))}
+          </Slider>
+        </div>
+      )}
     </div>
   );
 }

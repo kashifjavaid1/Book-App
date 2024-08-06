@@ -2,14 +2,13 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import bookRoutes from "./routes/books/Book.route.js";
-
+import cors from "cors";
 dotenv.config();
-
 const app = express();
 const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
-
+app.use(cors());
 // Connect to MongoDB
 const connectDB = async () => {
   try {
