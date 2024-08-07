@@ -9,11 +9,13 @@ import API_ROUTE from "../../../config";
 export default function FreeBook() {
   const [books, setBooks] = useState([]);
   const [error, setError] = useState(null);
-
   const filterData = async () => {
     try {
       const response = await axios.get(`${API_ROUTE}/book`);
-      setBooks(response.data);
+      const filterData = await response.data.filter((data) => {
+        return data?.category === "free";
+      });
+      setBooks(filterData);
     } catch (error) {
       console.error("Error fetching books:", error);
       setError(error.message);
