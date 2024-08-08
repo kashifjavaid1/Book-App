@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import bookRoutes from "./routes/books/Book.route.js";
+import sigInUser from "./routes/user/User.route.js";
 import cors from "cors";
 dotenv.config();
 const app = express();
@@ -26,7 +27,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/book", bookRoutes);
-
+app.use("/users", sigInUser);
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 });
