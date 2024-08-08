@@ -1,6 +1,34 @@
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import API_ROUTE from "../../../config";
 
 const SignIn = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [userName, setUserName] = useState("");
+  const navigate = useNavigate();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      await axios.post(`${API_ROUTE}/users/signup`, {
+        email,
+        password,
+        userName,
+      });
+      setEmail("");
+      setPassword("");
+      setUserName("");
+      navigate("/login");
+    } catch (error) {
+      console.error(
+        "Error during sign-in:",
+        error.response?.data || error.message
+      );
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 overflow-hidden relative">
       {/* Sign-in form */}
@@ -11,16 +39,22 @@ const SignIn = () => {
               type: "email",
               placeholder: "Email",
               icon: "M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z",
+              value: email,
+              onChange: (e) => setEmail(e.target.value),
             },
             {
               type: "text",
               placeholder: "Username",
               icon: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z",
+              value: userName,
+              onChange: (e) => setUserName(e.target.value),
             },
             {
               type: "password",
               placeholder: "Password",
               icon: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z",
+              value: password,
+              onChange: (e) => setPassword(e.target.value),
             },
           ]?.map((input, index) => (
             <div
@@ -31,6 +65,8 @@ const SignIn = () => {
               <input
                 type={input.type}
                 placeholder={input.placeholder}
+                value={input.value}
+                onChange={input.onChange}
                 className="w-full pl-10 pr-4 py-3 bg-white bg-opacity-20 text-white placeholder-gray-300 border border-white border-opacity-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent transition-all duration-300"
               />
               <svg
@@ -50,13 +86,15 @@ const SignIn = () => {
             </div>
           ))}
           <button
+            type="submit"
             className="w-full bg-white text-purple-600 py-3 rounded-lg font-semibold text-lg shadow-md hover:bg-opacity-90 transition-all duration-300 ease-in-out transform hover:scale-105 animate-fadeIn"
             style={{ animationDelay: "0.8s" }}
+            onClick={handleSubmit}
           >
             Sign In
           </button>
           <span className="flex">
-            <h1 className="text-white"> Do you have a account?</h1>
+            <h1 className="text-white">Do you have an account?</h1>
             <Link to="/login">
               <span className="hover:underline mx-3 hover:text-pink-800 cursor-pointer">
                 Login
