@@ -15,5 +15,5 @@ const userScheme = new mongoose.Schema({
     required: true,
   },
 });
-const User = mongoose.model("user", userScheme);
+const User = mongoose.model("sigIn", userScheme);
 export default User;
