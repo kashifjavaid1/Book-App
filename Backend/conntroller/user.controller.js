@@ -3,8 +3,14 @@ import bcrypt from "bcrypt";
 
 export const sigInUser = async (req, res) => {
   try {
+    console.log("Request Body:", req.body);
     const { userName, email, password } = req.body;
-    const user = await User.findOne({ email });
+    if (!userName || !email || !password) {
+      return res
+        .status(400)
+        .json({ message: "userName, email, and password are required" });
+    }
+    const user = await User.findOne({ email: email });
     if (user) {
       return res.status(400).json({ message: "User already exists" });
     }
@@ -29,7 +35,7 @@ export const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
+    if (!isMatch || !user) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
     return res.status(200).json({
