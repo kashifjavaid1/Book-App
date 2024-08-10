@@ -1,12 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import Logout from "../logout/Logout";
+import { useAuth } from "../context/AuthProvider";
 export default function Navbar() {
   const [sticky, setSticky] = useState(false);
+  const [user, setUser] = useAuth();
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") ? localStorage.getItem("theme") : "light"
   );
   const navigate = useNavigate();
-
   const handleLogin = () => {
     navigate("/login");
   };
@@ -143,9 +145,13 @@ export default function Navbar() {
                 </svg>
               </label>
             </div>
-            <button className="btn btn-primary" onClick={handleLogin}>
-              Login
-            </button>
+            {user ? (
+              <Logout />
+            ) : (
+              <button className="btn btn-primary" onClick={handleLogin}>
+                Login
+              </button>
+            )}
           </div>
         </div>
       </div>

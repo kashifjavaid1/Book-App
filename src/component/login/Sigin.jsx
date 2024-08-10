@@ -12,12 +12,14 @@ const SignIn = () => {
       email: data.email,
       password: data.password,
     };
-
     try {
-      await axios.post(`${API_ROUTE}/users/signup`, userInfor);
-      localStorage.setItem("user", JSON.stringify(userInfor));
-      reset();
-      navigate("/login");
+      const res = await axios.post(`${API_ROUTE}/users/signup`, userInfor);
+      if (res.data) {
+        alert("User successfully signed up");
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+        reset();
+        navigate("/login");
+      }
     } catch (error) {
       console.error(
         "Error during sign-in:",
