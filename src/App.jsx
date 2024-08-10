@@ -6,14 +6,16 @@ import Contect from "./component/contect/Contect";
 import LoginIn from "./component/login/Login";
 import SignIn from "./component/login/Sigin";
 import { useAuth } from "./component/context/AuthProvider";
+import { Toaster } from "react-hot-toast";
 
 export default function App() {
   const [user, setUser] = useAuth();
   return (
     <div className="dark:bg-slate-900 dark:text-white">
+      <Toaster />
       <Routes>
         <Route path="/login" element={<LoginIn />} />
-        <Route path="/signin" element={<SignIn />} />
+        <Route path="/siginIn" element={<SignIn />} />
         {user ? (
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />

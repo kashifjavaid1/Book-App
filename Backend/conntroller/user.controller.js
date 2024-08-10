@@ -3,7 +3,6 @@ import bcrypt from "bcrypt";
 
 export const sigInUser = async (req, res) => {
   try {
-    console.log("Request Body:", req.body);
     const { userName, email, password } = req.body;
     if (!userName || !email || !password) {
       return res

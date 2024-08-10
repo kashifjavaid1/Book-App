@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
+import toast from "react-hot-toast";
 
 export default function Logout() {
   const [user, setUser] = useAuth();
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate();
 
   const LogoutHandle = () => {
     try {
@@ -12,7 +13,8 @@ export default function Logout() {
         user: null,
       });
       localStorage.removeItem("user");
-      navigate("/login"); // Use navigate for redirect
+      toast.success("Successfully Logout!");
+      navigate("/login");
     } catch (error) {
       console.error("Failed to log out:", error);
     }

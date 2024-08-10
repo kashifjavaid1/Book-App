@@ -2,10 +2,31 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import API_ROUTE from "../../../config";
+import toast from "react-hot-toast";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+// Define your validation schema using yup
+const schema = yup.object().shape({
+  email: yup.string().email("Invalid email").required("Email is required"),
+  userName: yup.string().required("Username is required"),
+  password: yup
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .required("Password is required"),
+});
 
 const SignIn = () => {
-  const { register, handleSubmit, reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
   const navigate = useNavigate();
+
   const onSubmit = async (data) => {
     const userInfor = {
       userName: data.userName,
@@ -15,16 +36,13 @@ const SignIn = () => {
     try {
       const res = await axios.post(`${API_ROUTE}/users/signup`, userInfor);
       if (res.data) {
-        alert("User successfully signed up");
+        toast.success("Successfully created!");
         localStorage.setItem("user", JSON.stringify(res.data.user));
         reset();
         navigate("/login");
       }
     } catch (error) {
-      console.error(
-        "Error during sign-in:",
-        error.response?.data || error.message
-      );
+      toast.error(error.response?.data || error.message);
     }
   };
 
@@ -54,7 +72,7 @@ const SignIn = () => {
             },
           ].map((input, index) => (
             <div
-              key={input.type}
+              key={input.name}
               className="relative animate-slideInFromLeft"
               style={{ animationDelay: `${(index + 1) * 0.2}s` }}
             >
@@ -64,6 +82,11 @@ const SignIn = () => {
                 {...register(input.name)}
                 className="w-full pl-10 pr-4 py-3 bg-white bg-opacity-20 text-white placeholder-gray-300 border border-white border-opacity-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent transition-all duration-300"
               />
+              {errors[input.name] && (
+                <p className="text-red-500 text-sm py-2">
+                  {errors[input.name]?.message}
+                </p>
+              )}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5 absolute top-3.5 left-3 text-white"
@@ -82,13 +105,15 @@ const SignIn = () => {
           ))}
           <button
             type="submit"
-            className="w-full bg-white text-purple-600 py-3 rounded-lg font-semibold text-lg shadow-md hover:bg-opacity-90 transition-all duration-300 ease-in-out transform hover:scale-105 animate-fadeIn"
+            className="w-full bg-white text-purple-600 py-3 rounded-lg font-semibold text-lg shadow-md hover:bg-black transition-all duration-300 ease-in-out transform hover:scale-105 animate-fadeIn hover:text-white"
             style={{ animationDelay: "0.8s" }}
           >
             Sign In
           </button>
           <span className="flex">
-            <h1 className="text-white">Do you have an account?</h1>
+            <h1 className="text-white cursor-pointer hover:text-black">
+              Do you have an account?
+            </h1>
             <Link to="/login">
               <span className="hover:underline mx-3 hover:text-pink-800 cursor-pointer">
                 Login

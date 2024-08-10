@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthProvider";
 export default function Navbar() {
   const [sticky, setSticky] = useState(false);
   const [user, setUser] = useAuth();
+  console.log("🚀 ~ Navbar ~ user:", user);
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") ? localStorage.getItem("theme") : "light"
   );
